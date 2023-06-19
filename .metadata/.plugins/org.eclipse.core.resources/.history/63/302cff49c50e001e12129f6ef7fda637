@@ -1,0 +1,76 @@
+package com.example.demo.service;
+
+import java.time.LocalDateTime;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.demo.dto.AppointmentRequest;
+import com.example.demo.model.AppointmentModel;
+import com.example.demo.model.PatientModel;
+import com.example.demo.repo.AppointmentRepo;
+import com.example.demo.repo.PatientRepo;
+
+@Service
+@Transactional
+public class AppointmentService {
+
+	@Autowired
+	private AppointmentRepo appointmentRepo;
+
+	@Autowired
+	private PatientRepo patientRepo;
+
+	/*
+	 * This case is before using @Transactional annotation..
+	 * 
+	 * 
+	 * public AppointmentModel bookAppointment(AppointmentRequest
+	 * appointmentRequest) {
+	 * 
+	 * // --Saving new patient details-- PatientModel patientModel = new
+	 * PatientModel(); patientModel.setName(appointmentRequest.getName());
+	 * patientModel.setGender(appointmentRequest.getGender());
+	 * patientModel.setAge(appointmentRequest.getAge());
+	 * 
+	 * PatientModel savedPatient = patientRepo.save(patientModel);
+	 * 
+	 * System.out.println(10/0);
+	 * 
+	 * // --Saving Appointment details-- AppointmentModel appointmentModel = new
+	 * AppointmentModel(); appointmentModel.setPatientModel(savedPatient);
+	 * appointmentModel.setAppointmentDateTime(LocalDateTime.now());
+	 * 
+	 * AppointmentModel savedAppointmentDetails =
+	 * appointmentRepo.save(appointmentModel);
+	 * 
+	 * return savedAppointmentDetails; }
+	 */
+
+	// After using @Transactional annotation..
+
+	
+	public AppointmentModel bookAppointment(AppointmentRequest appointmentRequest) {
+
+		// --Saving new patient details--
+		PatientModel patientModel = new PatientModel();
+		patientModel.setName(appointmentRequest.getName());
+		patientModel.setGender(appointmentRequest.getGender());
+		patientModel.setAge(appointmentRequest.getAge());
+
+		PatientModel savedPatient = patientRepo.save(patientModel);
+		
+		System.out.println(10/0);
+
+		// --Saving Appointment details--
+		AppointmentModel appointmentModel = new AppointmentModel();
+		appointmentModel.setPatientModel(savedPatient);
+		appointmentModel.setAppointmentDateTime(LocalDateTime.now());
+
+		AppointmentModel savedAppointmentDetails = appointmentRepo.save(appointmentModel);
+
+		return savedAppointmentDetails;
+	}
+}
